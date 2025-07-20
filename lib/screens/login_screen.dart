@@ -114,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       var user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
 
-                      // Navigator.pushNamed(context, ChatScreen.id);
+                      // Hide loading dialog
+                      Navigator.of(context).pop();
 
                       if (user != null) {
                         print('user uid is ${user.user!.uid}');
@@ -127,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('用户名或者密码错误!')),
                       );
-                    } finally {
                       // Hide loading dialog
                       Navigator.of(context).pop();
                     }
