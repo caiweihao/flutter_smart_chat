@@ -65,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 8.0,
             ),
             TextField(
+              obscureText: true,
               onChanged: (value) {
                 //Do something with the user input.
                 password = value;
@@ -102,8 +103,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     //Implement login functionality.
                     print('email is $email password is $password');
                     try {
+                      // Show loading dialog
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false, // Prevent dismiss by tapping outside
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
                       var user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
+
                       // Navigator.pushNamed(context, ChatScreen.id);
 
                       if (user != null) {
@@ -114,6 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     } catch (e) {
                       print(e);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('用户名或者密码错误!')),
+                      );
+                    } finally {
+                      // Hide loading dialog
+                      Navigator.of(context).pop();
                     }
                   },
                   minWidth: 200.0,
